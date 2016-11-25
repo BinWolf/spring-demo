@@ -1,5 +1,5 @@
 *.swp
-logs/
-target/
+*.class
+*/target/
 *.iml
 .idea/
