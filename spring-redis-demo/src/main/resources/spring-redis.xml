@@ -2,24 +2,55 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xmlns:context="http://www.springframework.org/schema/context"
-	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:p="http://www.springframework.org/schema/p" xmlns:redis="http://www.springframework.org/schema/redis"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-	   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/redis http://www.springframework.org/schema/redis/spring-redis.xsd">
 
 	<context:component-scan base-package="com.wolf.*"/>
 
-	<bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-		  p:hostName="10.10.10.12" p:port="6379" p:usePool="true"/>
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxIdle" value="6"></property>
+		<property name="minEvictableIdleTimeMillis" value="300000"></property>
+		<property name="numTestsPerEvictionRun" value="3"></property>
+		<property name="timeBetweenEvictionRunsMillis" value="60000"></property>
+	</bean>
+
+	<bean id="redisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+		  p:hostName="10.10.10.12" p:port="6379" p:usePool="true" p:poolConfig-ref="jedisPoolConfig"/>
 
 	<!-- redis template definition -->
 	<bean id="redisTemplate"
 		  class="org.springframework.data.redis.core.RedisTemplate"
-		  p:connectionFactory-ref="jedisConnFactory" />
+		  p:connectionFactory-ref="redisConnectionFactory" />
+
+	<bean id="jdkSerializer" class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
 
 	<bean id="stringRedisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
-		<property name="connectionFactory" ref="jedisConnFactory" />
-		<property name="valueSerializer">
-			<bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
+		<property name="connectionFactory" ref="redisConnectionFactory" />
+		<property name="valueSerializer" ref="jdkSerializer"/>
+	</bean>
+
+	<!--消息发布服务端-->
+	<redis:listener-container>
+		<redis:listener ref="listener" serializer="jdkSerializer" method="handleMessage" topic="java" />  <!--  发布频道的名称-->
+	</redis:listener-container>
+
+	<bean id="messageListener" class="org.springframework.data.redis.listener.adapter.MessageListenerAdapter">
+		<property name="delegate" ref="listener" />
+		<property name="serializer" ref="jdkSerializer" />
+	</bean>
+
+	<bean id="redisContainer" class="org.springframework.data.redis.listener.RedisMessageListenerContainer">
+		<property name="connectionFactory" ref="redisConnectionFactory"/>
+		<property name="messageListeners">
+			<!-- map of listeners and their associated topics (channels or/and patterns) -->
+			<map>
+				<entry key-ref="messageListener">
+					<bean class="org.springframework.data.redis.listener.ChannelTopic">
+						<constructor-arg value="java" />   <!-- 这里配置消费端需要订阅的频道，可以是多个。该一例子订阅JAVA这个频道  -->
+					</bean>
+				</entry>
+			</map>
 		</property>
 	</bean>
 </beans>

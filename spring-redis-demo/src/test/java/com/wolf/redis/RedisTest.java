@@ -1,10 +1,9 @@
 package com.wolf.redis;
 
 import com.wolf.entity.User;
-import org.junit.Before;
+import com.wolf.redis.redisimpl.RedisService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.redis.core.ValueOperations;
@@ -23,7 +22,7 @@ import java.util.List;
 public class RedisTest {
 
     @Resource(name = "redisService")
-    private RedisService redisService;
+    private IRedisService redisService;
 
     private static List<User> users = new ArrayList<User>();
 
@@ -38,7 +37,7 @@ public class RedisTest {
     @Test
     public void test_addUser() {
         AbstractApplicationContext context = new ClassPathXmlApplicationContext("spring-redis.xml");
-        UserRedisService redisService = (UserRedisService)context.getBean("redisService");
+        RedisService redisService = (RedisService)context.getBean("redisService");
         redisService.addUser2Redis(users);
         System.out.println("end");
     }
@@ -47,14 +46,19 @@ public class RedisTest {
     public void test_getUsers() {
         List<User> list = redisService.getUsersFromRedis();
         System.out.println(list);
+        users = redisService.qryUserForList();
+        System.out.println(users);
     }
 
-    @Resource(name = "stringRedisTemplate")
-    private ValueOperations<String, Object> stringRedisTemplate;
+    @Test
+    public void test_saveObj2Redis(){
+        User user1 = new User(1, "wolf1", 21);
+        redisService.saveObj2Redis(user1);
+    }
 
     @Test
-    public void test_StrRedis(){
-        User user1 = new User(1, "wolf1", 21);
-        stringRedisTemplate.set("user:key",user1);
+    public void test_qryObjFromRedis(){
+        User u = redisService.qryObjFromRedis(1);
+        System.out.println(u);
     }
 }
