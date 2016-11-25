@@ -1,0 +1,33 @@
+server:
+    port: 1234
+
+logging:
+    level:
+        tk.mybatis: DEBUG
+
+spring:
+    thymeleaf:
+        cache: false
+    datasource:
+        name: killua
+        url: jdbc:mysql://127.0.0.1:3306/dev?useUnicode=true&characterEncoding=utf-8&useSSL=false
+        username: u_96333
+        password: u_96333
+        driver-class-name: com.mysql.jdbc.Driver
+
+        initialSize: 1
+        minIdle: 1
+        maxActive: 20
+
+        maxWait: 60000
+        timeBetweenEvictionRunsMillis: 60000
+        minEvictableIdleTimeMillis: 300000
+
+        validationQuery: select 'x'
+
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+
+        poolPreparedStatements: true
+        maxOpenPreparedStatements: 20
