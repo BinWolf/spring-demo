@@ -3,3 +3,6 @@
 */target/
 *.iml
 /.idea/*
+.DS_Store
+spring-mvc-demo/.DS_Store
+*/.DS_Store
