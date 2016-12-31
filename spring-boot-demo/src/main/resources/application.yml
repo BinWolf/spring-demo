@@ -2,8 +2,7 @@ server:
     port: 1234
 
 logging:
-    level:
-        tk.mybatis: DEBUG
+    config: classpath:logback.xml
 
 spring:
     thymeleaf:
@@ -11,8 +10,8 @@ spring:
     datasource:
         name: killua
         url: jdbc:mysql://127.0.0.1:3306/dev?useUnicode=true&characterEncoding=utf-8&useSSL=false
-        username: u_96333
-        password: u_96333
+        username: root
+        password: root
         driver-class-name: com.mysql.jdbc.Driver
 
         initialSize: 1

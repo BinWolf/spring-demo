@@ -2,6 +2,7 @@ package com.wolf.aop;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -23,7 +24,11 @@ public class LogAspect {
     public void after(JoinPoint joinpoint) {
         MethodSignature methodSignature = (MethodSignature) joinpoint.getSignature();
         Method method = methodSignature.getMethod();
-        System.out.println(method.getName());
+        System.out.println("method : "+method.getName());
+        Object[] objects = joinpoint.getArgs();
+        for (int i = 0; i < objects.length; i++) {
+            System.out.println(objects[i]);
+        }
         AopLog aopLog = method.getAnnotation(AopLog.class);
         System.out.println(aopLog.print());
     }

@@ -1,8 +1,8 @@
 *.swp
 *.class
-target/*
-classes/
-*/*.iml
-.idea/
+/target/*
+/classes/*
+*.iml
 .DS_Store
 */.DS_Store
+/.idea/

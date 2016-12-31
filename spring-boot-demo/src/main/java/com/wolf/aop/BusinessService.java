@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 public class BusinessService {
 
     @AopLog(print = "注解拦截嘎嘎.....")
-    public void printAnnotationAopLog() {
-        System.out.println("In method print ....");
+    public void printAnnotationAopLog(String name) {
+        System.out.println("In method print ...." + name);
     }
 
     public void demoMethon() {
