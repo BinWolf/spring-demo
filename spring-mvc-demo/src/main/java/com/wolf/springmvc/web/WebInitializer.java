@@ -1,4 +1,4 @@
-package com.wolf.springmvc.configuration;
+package com.wolf.springmvc.web;
 
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -15,12 +15,13 @@ public class WebInitializer implements WebApplicationInitializer {
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-        context.register(ViewResolverConfiguration.class);
+        context.register(WebMvcConfigurationAdapter.class);
         context.setServletContext(servletContext);
 
         ServletRegistration.Dynamic servlet = servletContext.addServlet("dispatcher", new DispatcherServlet(context));
         servlet.addMapping("/");
         servlet.setLoadOnStartup(1);
-
+        /**开启异步支持*/
+        servlet.setAsyncSupported(true);
     }
 }
