@@ -4,7 +4,6 @@ import com.wolf.product.conf.ProductConfigure;
 import com.wolf.product.provider.ProductFactory;
 import com.wolf.product.vo.Product;
 import com.wolf.product.vo.SwitchVo;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -16,10 +15,10 @@ import java.util.List;
 /**
  * Created by wolf on 16/11/26.
  */
-public class Main {
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
-    @Test
-    public void test_qryProductList() {
+public class ProductMain {
+    private static final Logger log = LoggerFactory.getLogger(ProductMain.class);
+
+    public static void main(String[] args) {
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(ProductConfigure.class);
         ProductFactory productFactory = applicationContext.getBean(ProductFactory.class);
         SwitchVo switchVo = new SwitchVo();
@@ -30,7 +29,5 @@ public class Main {
                 log.debug("Product id : " + list.get(i).getProductId());
             }
         }
-
     }
-
 }

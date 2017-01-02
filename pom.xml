@@ -35,6 +35,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <!-- db start -->
@@ -48,6 +49,7 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>${springframework.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
