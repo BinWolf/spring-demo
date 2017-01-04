@@ -3,6 +3,7 @@ package com.wolf.springmvc.action;
 import com.wolf.springmvc.vo.UserForm;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,6 +16,12 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/anno")
 public class AnnoAction {
+
+    @RequestMapping("/normalPage")
+    public String junitTest(Model model){
+        model.addAttribute("testMsg", "junit测试信息");
+        return "page";
+    }
 
     /**
      * 默认是类的请求路径
