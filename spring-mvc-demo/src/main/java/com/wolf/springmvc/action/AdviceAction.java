@@ -15,7 +15,7 @@ public class AdviceAction {
 
     @RequestMapping("/advice")
     public String getSomething(@ModelAttribute("msg") String msg, UserForm userForm) {
-        System.out.println("userName : " + userForm.getName() +" ; user age : "+ userForm.getAge());
+        System.out.println("userName : " + userForm.getName() + " ; user age : " + userForm.getAge());
         throw new IllegalArgumentException("AdviceAction advice method argument exception, from @ModelAttribute: " + msg);
     }
 

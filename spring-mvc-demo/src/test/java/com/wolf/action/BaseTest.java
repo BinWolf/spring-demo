@@ -44,18 +44,17 @@ public class BaseTest {
     MockHttpServletRequest request;
 
     @Before
-    public void setup(){
+    public void setup() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
     }
 
     /**
      * 测试返回json格式
-     * @throws Exception
      */
     @Test
-    public void testJsonConverter() throws Exception{
+    public void testJsonConverter() throws Exception {
         ResultActions actions = mockMvc.perform(MockMvcRequestBuilders.get("/iResponse"))
-                                       .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isOk());
         MvcResult mvcResult = actions.andReturn();
         System.out.println(mvcResult.getResponse().getContentAsString());
     }
