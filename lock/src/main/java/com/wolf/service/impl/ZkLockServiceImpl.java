@@ -29,12 +29,12 @@ public class ZkLockServiceImpl implements IDistributedLockService {
 	/**
 	 * 超时时间
 	 */
-	private static int SESSION_TIMEOUT = 6000;
+	private static int SESSION_TIMEOUT = 100;
 
 	/**
 	 * 锁超时时间
 	 */
-	private static int LOCK_WAIT_TIMEOUT = 15000;
+	private static int LOCK_WAIT_TIMEOUT = 2000;
 
 	/**
 	 * ZK地址
@@ -67,7 +67,6 @@ public class ZkLockServiceImpl implements IDistributedLockService {
 		return true;
 	}
 
-
 	/**
 	 * 对信息加锁(并发时不等待)
 	 * @param key - 锁名
@@ -77,8 +76,7 @@ public class ZkLockServiceImpl implements IDistributedLockService {
 	public boolean lock(String key) {
 		return lock(key, false);
 	}
-
-
+	
 	/**
 	 * 对信息加锁
 	 * @param key    - 锁名
@@ -132,7 +130,6 @@ public class ZkLockServiceImpl implements IDistributedLockService {
 
 	@Override
 	public boolean release(String key) {
-
 		ZkTemplate zkTemplate = (ZkTemplate) ThreadContext.remove(String.format(THREAD_KEY_BASE, key));
 
 		if (zkTemplate == null) {
@@ -157,7 +154,6 @@ public class ZkLockServiceImpl implements IDistributedLockService {
 			return false;
 		}
 	}
-
 
 	private boolean checkForPreparedPath(ZkTemplate zkTemplate) throws Exception {
 
@@ -241,7 +237,7 @@ public class ZkLockServiceImpl implements IDistributedLockService {
 		/**
 		 * 锁根目录
 		 */
-		private String basePath = "/zk-lock";
+		private String basePath = "/zk-lock-test";
 
 		/**
 		 * 锁目录
